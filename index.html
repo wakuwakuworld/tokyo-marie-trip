@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>東京・貓步輕旅 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; -webkit-tap-highlight-color: transparent; }
+        [x-cloak] { display: none !important; }
+        .tab-active { background-color: #f472b6 !important; color: white !important; border-color: #f472b6 !important; }
+        .type-active { background-color: #334155 !important; color: white !important; border-color: #334155 !important; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .filter-btn { white-space: nowrap !important; flex-shrink: 0; transition: all 0.2s; }
+        .desc-text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .cvs-tag { width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 16px; flex-shrink: 0; }
+    </style>
+</head>
+<body class="bg-[#FFFBFB] text-slate-700" x-data="travelApp()" x-cloak>
+
+    <nav class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-pink-100 px-5 py-3 flex justify-between items-center">
+        <div class="text-pink-400 font-black text-xl tracking-tighter">🐾 Tokyo 2026</div>
+        <div class="flex gap-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+            <a href="#info">航班</a>
+            <a href="#food">美食</a>
+            <a href="#stores" class="text-emerald-500">補給</a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 pt-20 pb-10 space-y-8">
+       <section id="info" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-6 rounded-[28px] shadow-sm border border-pink-50">
+                <h2 class="text-[12px] font-black text-pink-400 mb-4 tracking-[0.2em] uppercase">✈️ Flight</h2>
+                <div class="space-y-3 text-[13px] font-bold">
+                    <p class="flex justify-between border-b border-dashed border-pink-100 pb-2">
+                        <span class="text-slate-500">1/8 (四) IT 200</span>
+                        <span class="text-pink-500 font-black">06:35 - 10:35 NRT</span>
+                    </p>
+                    <p class="flex justify-between pt-1">
+                        <span class="text-slate-500">1/12 (一) IT 217</span>
+                        <span class="text-pink-500 font-black">05:00 - 07:55 HND</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-[28px] shadow-sm border border-pink-50 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-[12px] font-black text-pink-400 mb-2 tracking-[0.2em] uppercase">🏨 Hotel</h2>
+                    <p class="text-2xl font-black italic text-slate-800">the b 新橋</p>
+                    <p class="text-[12px] font-bold text-slate-400 mt-1">📍 內幸町站 4 分 / 新橋站 6 分</p>
+                </div>
+                <a href="https://maps.app.goo.gl/tfMFBKoHqwFHk8Zw5" target="_blank" class="mt-5 block w-full text-center py-3.5 bg-pink-50 rounded-2xl text-[12px] font-black text-pink-400 active:scale-95 transition-transform">開啟飯店地圖</a>
+            </div>
+
+            <div class="bg-white p-6 rounded-[28px] shadow-sm border border-pink-50 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-[12px] font-black text-pink-400 mb-2 tracking-[0.2em] uppercase">✂️ Hair Salon</h2>
+                    <p class="text-2xl font-black italic text-slate-800">SIGN opposite</p>
+                    <p class="text-[12px] font-bold text-slate-400 mt-1">📍 表参道駅/外苑前，步行 8 分鐘</p>
+                </div>
+                <a href="https://maps.app.goo.gl/6mzY3A2266eqbyDRA" target="_blank" class="mt-5 block w-full text-center py-3.5 bg-pink-50 rounded-2xl text-[12px] font-black text-pink-400 active:scale-95 transition-transform">開啟沙龍地圖</a>
+            </div>
+        </section>
+
+        <section id="food" class="relative">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="w-8 h-[2px] bg-pink-300"></span>
+                <h2 class="text-xl font-black text-slate-800">美食攻略</h2>
+            </div>
+            
+            <div class="sticky top-[56px] z-40 bg-[#FFFBFB]/95 backdrop-blur-sm pt-2 pb-4 space-y-4">
+                <div class="flex gap-2 overflow-x-auto hide-scrollbar px-1 py-1">
+                    <template x-for="area in areas" :key="area">
+                        <button @click="currentArea = area" 
+                            :class="currentArea === area ? 'tab-active shadow-md' : 'bg-white text-slate-500 border-slate-100'"
+                            class="filter-btn px-5 py-2.5 rounded-full text-[13px] font-black border shadow-sm" x-text="area"></button>
+                    </template>
+                </div>
+                <div class="flex gap-2 overflow-x-auto hide-scrollbar px-1 py-1">
+                    <template x-for="type in types" :key="type">
+                        <button @click="currentType = type" 
+                            :class="currentType === type ? 'type-active shadow-md' : 'bg-white text-slate-500 border-slate-100'"
+                            class="filter-btn px-5 py-2.5 rounded-full text-[13px] font-black border shadow-sm" x-text="type"></button>
+                    </template>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+                <template x-for="res in filteredRestaurants" :key="res.name">
+                    <div class="bg-white p-6 rounded-[32px] border border-pink-50 shadow-sm flex flex-col hover:shadow-md transition-all">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="font-black text-slate-800 text-lg leading-tight flex-1 pr-2" x-text="res.name"></h3>
+                            <span class="text-[10px] bg-pink-50 text-pink-500 px-2.5 py-1 rounded-lg font-black shrink-0" x-text="res.area"></span>
+                        </div>
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="text-[11px] bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md font-bold" x-text="res.type"></span>
+                            <div class="flex items-center text-[12px] font-black text-orange-500">⭐ <span x-text="res.tabelog"></span></div>
+                        </div>
+                        <p class="text-slate-600 text-[13px] leading-relaxed mb-4 desc-text font-medium" x-text="res.desc"></p>
+                        
+                        <div x-show="res.note" class="bg-amber-50 p-3 rounded-xl mb-5 border-l-4 border-amber-300">
+                            <p class="text-amber-800 text-[11px] font-bold leading-normal">💡 <span x-text="res.note"></span></p>
+                        </div>
+
+                        <div class="mt-auto">
+                            <p class="text-slate-400 text-[12px] mb-4 font-bold flex items-center gap-1 italic">🚉 <span x-text="res.station"></span></p>
+                            <a :href="res.mapUrl" target="_blank" class="block w-full text-center py-4 bg-slate-900 rounded-[22px] text-[12px] font-black text-white active:bg-pink-500 transition-colors">Google Map 導航</a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </section>
+
+        <section id="stores" class="space-y-8 pt-4 border-t border-slate-100">
+            <div class="flex items-center gap-2">
+                <span class="w-8 h-[2px] bg-emerald-300"></span>
+                <h2 class="text-xl font-black text-slate-800">補給地圖</h2>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-[11px] font-black text-emerald-600 tracking-widest uppercase ml-1">🛒 推薦超市 (按實際步行時間)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <template x-for="market in supermarkets" :key="market.name + market.subName">
+                        <div class="bg-white p-5 rounded-[28px] border border-emerald-50 shadow-sm">
+                            <h4 class="font-black text-slate-800 text-lg mb-1" x-text="market.name"></h4>
+                            <p class="text-[11px] text-slate-400 font-bold mb-4" x-text="market.subName"></p>
+                            <div class="grid grid-cols-2 gap-2 mb-4">
+                                <div class="bg-emerald-50/50 p-3 rounded-2xl text-center">
+                                    <p class="text-[10px] text-slate-400 font-bold mb-1 italic">至 the b 新橋</p>
+                                    <p class="text-sm font-black text-emerald-700">🚶 <span x-text="market.distHotel"></span></p>
+                                </div>
+                                <div class="bg-slate-50 p-3 rounded-2xl text-center">
+                                    <p class="text-[10px] text-slate-400 font-bold mb-1 italic">至 新橋站</p>
+                                    <p class="text-sm font-black text-slate-700">🚶 <span x-text="market.distStation"></span></p>
+                                </div>
+                            </div>
+                            <a :href="market.map" target="_blank" class="block w-full text-center py-3 bg-emerald-600 rounded-xl text-[12px] font-black text-white">Google Map 導航</a>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-[11px] font-black text-blue-600 tracking-widest uppercase ml-1">🏪 飯店旁超商</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <template x-for="store in convStores" :key="store.name">
+                        <div class="bg-white p-4 rounded-[24px] border border-blue-50 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <div :style="`background-color: ${store.color}`" class="cvs-tag" x-text="store.logo"></div>
+                                    <span class="font-black text-slate-800 text-[13px]" x-text="store.brand"></span>
+                                </div>
+                                <p class="text-[10px] text-slate-500 font-bold mb-2 leading-tight" x-text="store.name"></p>
+                                <p class="text-[11px] font-black text-slate-700 mb-3 italic">🚶 <span x-text="store.dist"></span></p>
+                            </div>
+                            <a :href="store.map" target="_blank" class="block w-full text-center py-2 bg-blue-50 rounded-lg text-[10px] font-black text-blue-500">導航</a>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function travelApp() {
+            return {
+                currentArea: '全部',
+                currentType: '全部',
+                areas: ['全部', '銀座/新橋', '東京/日本橋/築地', '新宿/澀谷/惠比壽', '上野/淺草/大塚'],
+                types: ['全部', '炸豬排', '壽司', '拉麵', '天婦羅', '燒肉', '牡蠣/生蠔', '其它'],
+                
+                restaurants:  [
+                    { name: "根室花まる KITTE丸の内店", type: "壽司", station: "東京駅", area: "東京/日本橋/築地", tabelog: "3.54", desc: "來自北海道的高品質迴轉壽司，鮮度極佳，是KITTE大樓內的排隊大王。", note: "建議一開門就領號碼牌，QR code可隨時追蹤進度。", mapUrl: "https://goo.gl/maps/V3UuPS9DUS6EJFqR7" },
+                    { name: "回転壽司 根室花まる 銀座店", type: "壽司", station: "銀座駅", area: "銀座/新橋", tabelog: "3.47", desc: "位於銀座Tokyu Plaza 10樓，提供產地直送的新鮮魚貨與特色花咲蟹湯。", note: "熱門時段人潮眾多，可先逛逛樓下免稅店或景觀台。", mapUrl: "https://goo.gl/maps/ErdPPT9yLF3SxCSn6" },
+                    { name: "とんかつ山家 上野店", type: "炸豬排", station: "御徒町駅", area: "上野/淺草/大塚", tabelog: "3.58", desc: "以驚人的CP值聞名，豬排份量十足、口感厚實，是當地人心中的第一選擇。", note: "店面極小，建議11點前到訪避免排隊超過一小時。", mapUrl: "https://goo.gl/maps/B2GPSNHGCG1dG7uB6" },
+                    { name: "とんかつ山家 御徒町店", type: "炸豬排", station: "御徒町駅", area: "上野/淺草/大塚", tabelog: "3.56", desc: "山家分店，維持同樣的高水準與親民價格，是上野購物後的絕佳補給站。", note: "雖有兩層樓，但位子依然緊湊，不適合久坐談話。", mapUrl: "https://goo.gl/maps/78pAsbeopeHYkuwL7" },
+                    { name: "銀座 八五", type: "拉麵", station: "東銀座駅", area: "銀座/新橋", tabelog: "3.94", desc: "米其林推薦！湯頭融合法餐技巧，不加醬油或味噌，呈現極致的澄清肉湯風味。", note: "需透過指定平台線上預約，現場不接受排隊。", mapUrl: "https://goo.gl/maps/SsCvHcBbX51TmaAT7" },
+                    { name: "麵屋ひょっとこ 交通會館店", type: "拉麵", station: "有樂町駅", area: "銀座/新橋", tabelog: "3.78", desc: "主打柚子鹽味拉麵，湯底清爽回甘，搭配大片厚切叉燒非常滿足。", note: "位於老舊百貨地下街，位子只有吧檯且空間擁擠。", mapUrl: "https://goo.gl/maps/m5WkcKFE2odouK9YA" },
+                    { name: "天ぷら新宿つな八 総本店", type: "天婦羅", station: "新宿三丁目駅", area: "新宿/澀谷/惠比壽", tabelog: "3.48", desc: "百年老店風味，堅持用胡麻油炸出金黃酥脆的質地，環境極具和風古韻。", note: "午餐時間CP值最高，有專屬的商業午餐定食。", mapUrl: "https://goo.gl/maps/BDVUFdDDZ6Xhvy9A7" },
+                    { name: "白えび亭 東京駅店", type: "其它", station: "東京駅", area: "東京/日本橋/築地", tabelog: "3.49", desc: "富山灣「寶石」白蝦專賣，滿滿的剝殼小白蝦鋪在飯上，味道極致鮮甜。", note: "位於東京站一番街，出入車站非常便利。", mapUrl: "https://goo.gl/maps/qEhccsXq8uDfELEF9" },
+                    { name: "日本橋 天丼 金子半之助 本店", type: "天婦羅", station: "三越前駅", area: "東京/日本橋/築地", tabelog: "3.56", desc: "超大份量天丼始祖，麻油香與秘製甜鹹醬汁的完美結合，讓人食指大動。", note: "排隊2小時是常態，若沒時間可改去分店。", mapUrl: "https://goo.gl/maps/oChHMmg42neDKpQU9" },
+                    { name: "麵屋海神 新宿店", type: "拉麵", station: "新宿駅", area: "新宿/澀谷/惠比壽", tabelog: "3.77", desc: "主打當日魚鮮熬製的清湯，味道淡雅鮮甜，附上烤飯糰可拌湯食用。", note: "湯底口味隨季節魚獲調整，推薦點選海神定食。", mapUrl: "https://goo.gl/maps/HFBgHBCckQ5HBgrBA" },
+                    { name: "親子丼專門店 ○勝", type: "其它", station: "銀座駅", area: "銀座/新橋", tabelog: "3.49", desc: "隱身銀座的精品親子丼，使用特選名古屋土雞，蛋汁半熟濕滑。", note: "店鋪位子隱密且座位少，適合喜歡安靜用餐的食客。", mapUrl: "https://goo.gl/maps/X8ATYxiE52VL1gEt6" },
+                    { name: "挽肉屋 神德", type: "其它", station: "東銀座駅", area: "銀座/新橋", tabelog: "3.47", desc: "現磨現烤漢堡排專賣店，提供多種沾醬選擇，可體驗炭火炙烤的香氣。", note: "飯可免費續碗，推薦搭配生雞蛋食用。", mapUrl: "https://goo.gl/maps/63STpemTJAzmBQVx6" },
+                    { name: "うどん山長 惠比壽店", type: "其它", station: "惠比壽駅", area: "新宿/澀谷/惠比壽", tabelog: "3.68", desc: "關西風高湯烏龍麵名店，麵條極具彈性，高湯使用高級柴魚熬製。", note: "推薦搭配他們的招牌出汁捲玉子，非常入味。", mapUrl: "https://goo.gl/maps/q66YU3GuR71QZ6Wb7" },
+                    { name: "日々晴々 新宿三丁目店", type: "壽司", station: "新宿三丁目駅", area: "新宿/澀谷/惠比壽", tabelog: "3.44", desc: "時髦的餐酒館式壽司店，提供創意壽司與各式清酒，適合晚餐小酌。", note: "風格與一般連鎖壽司不同，裝潢設計感十足。", mapUrl: "https://goo.gl/maps/rqj3w2krg7zJqEV67" },
+                    { name: "焼きあご塩らー麵たかはし 銀座店", type: "拉麵", station: "東銀座駅", area: "銀座/新橋", tabelog: "3.63", desc: "濃厚烤飛魚(あご)高湯風味，帶有獨特的炭火焦香，是拉麵界的重口味清流。", note: "銀座店交通極方便，建議搭配冷掉的茶泡飯吃法。", mapUrl: "https://goo.gl/maps/VUtWiwMbTJtFwSd48" },
+                    { name: "焼きあご塩らー麵 新宿本店", type: "拉麵", station: "西武新宿駅", area: "新宿/澀谷/惠比壽", tabelog: "3.52", desc: "新宿地區的高人氣排隊拉麵，飛魚湯頭層次分明，麵條吸附湯汁力極強。", note: "本店常客較多，晚上10點後人潮會少一些。", mapUrl: "https://goo.gl/maps/G1SaY15RJNMbnfmc6" },
+                    { name: "かに地獄 新橋", type: "其它", station: "新橋駅", area: "銀座/新橋", tabelog: "3.48", desc: "螃蟹愛好者的天堂，提供各種螃蟹料理與熱鬧的海產拍賣氣氛。", note: "適合團體聚餐，點餐方式較靈活，可依預算挑選。", mapUrl: "https://maps.app.goo.gl/Th8es8WyK3jYkGK8A" },
+                    { name: "とんかつ檍 銀座店", type: "炸豬排", station: "銀座駅", area: "銀座/新橋", tabelog: "3.66", desc: "主打林SPF熟成豬，特徵是半熟的肉質與豐富的油脂，搭配各種岩鹽非常美味。", note: "豬排油脂豐厚，建議選擇中等份量才不會過膩。", mapUrl: "https://maps.app.goo.gl/M43reFdRFJgCvRXd8" },
+                    { name: "天ぷら 阿部 銀座本店", type: "天婦羅", station: "銀座駅", area: "銀座/新橋", tabelog: "3.49", desc: "隱身大樓地下室的職人天婦羅店，現炸海鮮與野菜品質優異且價位合理。", note: "師傅就在面前現炸，有很強的視覺觀賞性。", mapUrl: "https://maps.app.goo.gl/o8jUDDnAfzJGjpQ47" },
+                    { name: "燒肉冷麵だいじゅ", type: "燒肉", station: "大塚駅", area: "上野/淺草/大塚", tabelog: "3.71", desc: "當地超熱門燒肉店，肉質切片厚實且調味平衡，冷麵更是解膩神物。", note: "由於離飯店稍遠，建議專程跑一趟並事先預約。", mapUrl: "https://maps.app.goo.gl/egd78zjxuzKVJjXW6" },
+                    { name: "鳥めし 鳥藤分店", type: "其它", station: "築地市場駅", area: "東京/日本橋/築地", tabelog: "3.65", desc: "築地雞肉專家，親子丼與雞肉炊飯味道濃郁，是市場內必吃的「非魚類」美食。", note: "注意營業時間，通常下午一點半後就會陸續收攤。", mapUrl: "https://maps.app.goo.gl/fFgEbVfYLMKd9Ubc6" },
+                    { name: "かつ好", type: "炸豬排", station: "人形町駅", area: "東京/日本橋/築地", tabelog: "3.75", desc: "靜謐優雅的豬排名店，注重油溫控制，炸出的豬排外衣薄脆，肉汁完全鎖住。", note: "環境相當高雅，適合想安靜享用頂級豬排的時段。", mapUrl: "https://maps.app.goo.gl/3DcSLAMsgP2gyf3v9" },
+                    { name: "本とさや", type: "燒肉", station: "淺草駅", area: "上野/淺草/大塚", tabelog: "3.74", desc: "老式炭火燒肉，肉塊大且醃醬入味，是追求原始肉食快感的最佳去處。", note: "店內煙霧較重，建議穿著不怕異味的輕便服裝。", mapUrl: "https://goo.gl/maps/erPgTvpPi9QZBEmF9" },
+                    { name: "燒肉男マンモス", type: "燒肉", station: "新橋駅", area: "銀座/新橋", tabelog: "3.48", desc: "新橋上班族最愛的燒肉店，主打新鮮內臟類與極具震撼力的厚切牛排。", note: "位於飯店附近，是第一天晚餐或消夜的好選擇。", mapUrl: "https://maps.app.goo.gl/VERkf8rpiDxfvw5YA" },
+                    { name: "燒肉29テラス 渋谷南口店", type: "燒肉", station: "渋谷駅", area: "新宿/澀谷/惠比壽", tabelog: "3.46", desc: "現代風格燒肉，強調產地直送的和牛，油花分布均勻，口感軟嫩。", note: "在澀谷購物後，這裡是很適合放鬆用餐的據點。", mapUrl: "https://maps.app.goo.gl/rrN5QzBYMCGYFw8C9" },
+                    { name: "銀座で生牡蠣が美味しい専門店 牡蠣Bar", type: "牡蠣/生蠔", station: "銀座駅", area: "銀座/新橋", tabelog: "3.41", desc: "銀座專業生蠔吧，主打全國各地新鮮生蠔直送，能品嚐不同海域的細微風味。", note: "位於銀座五丁目，提供高品質生食級牡蠣與精選酒類搭配。", mapUrl: "https://maps.app.goo.gl/F8FgSskZyqzh4nm16" },
+                    { name: "原宿 牡蠣屋", type: "牡蠣/生蠔", station: "明治神宮前駅", area: "新宿/澀谷/惠比壽", tabelog: "3.37", desc: "2024新地標 HARAKADO 內的高人氣牡蠣專賣店，提供新鮮生蠔與創意料理。", note: "位於表參道交叉點核心，交通極其方便，環境寬敞時髦。", mapUrl: "https://maps.app.goo.gl/9rNJXX2a5qQtU6kSA" },
+                    { name: "牡蠣×海老かいり 恵比寿店", type: "牡蠣/生蠔", station: "惠比壽駅", area: "新宿/澀谷/惠比壽", tabelog: "3.48", desc: "主打超大粒生蠔與鮮蝦料理，其「生蠔山」視覺效果驚人，味道濃厚。", note: "適合喜歡重口味與海鮮視覺饗宴的食客，就在惠比壽站旁。", mapUrl: "https://maps.app.goo.gl/XMtJ3LTyeFRsLvjk8" },
+                    { name: "牡蠣場 北海道厚岸", type: "牡蠣/生蠔", station: "三越前駅", area: "東京/日本橋/築地", tabelog: "3.47", desc: "來自北海道厚岸名產地直送，一年四季都能吃到鮮甜肥美的優質生蠔。", note: "位於日本橋 COREDO 室町，環境舒適且交通便利。", mapUrl: "https://maps.app.goo.gl/sFtmUvWhMH3nRkJN9" },
+                    { name: "生蠔吧 COVO", type: "牡蠣/生蠔", station: "代代木駅", area: "新宿/澀谷/惠比壽", tabelog: "3.44", desc: "隱身在代代木車站旁的精緻生蠔吧，提供當日最推薦的多種類生蠔對比試吃。", note: "店內氛圍溫馨，適合配上白酒慢慢享用，非常適合約會。", mapUrl: "https://maps.app.goo.gl/eERwYSBimQUEeidn9"}
+                ],
+
+                supermarkets: [
+                    { name: "肉のハナマサ", subName: "西新橋店 (最近)", distHotel: "3 分鐘", distStation: "7 分鐘", map: "https://maps.app.goo.gl/iteC7PpKXTaYY1DQ8" },
+                    { name: "福島屋", subName: "虎之門店 (精品超市)", distHotel: "4 分鐘", distStation: "10 分鐘", map: "https://maps.app.goo.gl/LVCmX3TcBMrzoFMRA" },
+                    { name: "Maruetsu Petit", subName: "新橋五丁目店", distHotel: "6 分鐘", distStation: "8 分鐘", map: "https://maps.app.goo.gl/D9xxYyvLtfzjk7ir5" },
+                    { name: "Motomachi Union", subName: "新橋店 (跨鐵道)", distHotel: "10 分鐘", distStation: "1 分鐘", map: "https://maps.app.goo.gl/etgjmTtL1mzxsx8t8" },
+                    { name: "肉のハナマサ", subName: "銀座店 (24H)", distHotel: "12 分鐘", distStation: "5 分鐘", map: "https://maps.app.goo.gl/Qbvn94YMA4oeShZk7" },
+                    { name: "唐吉訶德", subName: "銀座本店 (深夜採購)", distHotel: "14 分鐘", distStation: "5 分鐘", map: "https://maps.app.goo.gl/QzhUzPeBSAVSvjuy8" }
+                ],
+
+                convStores: [
+                    { brand: "Lawson", logo: "L", color: "#0066b2", name: "新橋日比谷通店", dist: "1 分鐘", map: "https://maps.app.goo.gl/QcmqHeRgrca8VrQ2A" },
+                    { brand: "7-Eleven", logo: "7", color: "#ee1c25", name: "西新橋２丁目店", dist: "2 分鐘", map: "https://maps.app.goo.gl/8YNxuYDaRBNh2kz17" },
+                    { brand: "7-Eleven", logo: "7", color: "#ee1c25", name: "西新橋１丁目店", dist: "3 分鐘", map: "https://maps.app.goo.gl/eLK8EQK1cJJL97qQ7" },
+                    { brand: "FamilyMart", logo: "F", color: "#00a859", name: "西新橋一丁目店", dist: "3 分鐘", map: "https://maps.app.goo.gl/XtAJ6b8aZSu2Rdje9" }
+                ],
+
+                get filteredRestaurants() {
+                    return this.restaurants.filter(r => {
+                        const matchArea = this.currentArea === '全部' || r.area === this.currentArea;
+                        const matchType = this.currentType === '全部' || r.type === this.currentType;
+                        return matchArea && matchType;
+                    });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
